@@ -19,7 +19,9 @@ sign-off** (open an issue or ask before adding).
 
 | Dependency | Purpose | Added in |
 |------------|---------|----------|
-| _(none yet)_ | | |
+| `npm:pg` (pinned) | Postgres driver backing Kysely's `PostgresDialect`. Std lib has no Postgres client; Kysely's first-class support targets node-postgres. Runs under Deno's npm compat (no `postinstall` executed). | ADR-0003 |
+| `npm:kysely` (pinned) | Type-safe query builder + migrator. Replaces both an ORM and hand-written SQL strings; gives AFK agents compile-time column safety. | ADR-0003 |
+| `npm:kysely-codegen` (pinned, **dev-only**) | Generates the Kysely `Database` type from the migrated schema so query types can't drift. Run via `node`/`npx` at dev time; not a runtime dependency. | ADR-0003 |
 
 ## Rejected / parked
 
