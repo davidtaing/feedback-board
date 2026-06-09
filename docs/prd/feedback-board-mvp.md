@@ -181,7 +181,35 @@ this build.
 
 ## Implementation Decisions
 
-_Owned by the technical session (`grill-with-prd`). Left empty._
+_Owned by the technical session (`grill-with-prd`). ADR-worthy calls link out to `docs/adr/`._
+
+### Merge / unmerge data shape
+
+Non-destructive **redirect pointer**: a request carries a nullable `merged_into` to its
+survivor. Merge sets that one field — votes/comments are never relocated. Survivor's vote count
+(`COUNT(DISTINCT identity)`) and comment list are aggregated at read time across the survivor
+and its duplicates; the duplicate redirects, so post-merge activity lands natively on the
+survivor. Unmerge clears the pointer; the duplicate returns with exactly what it had at merge
+time. Merges are **depth-1** (a duplicate can't be a survivor and vice-versa) — no chains, no
+recursive queries. Full rationale and trade-offs: [ADR-0002](../adr/0002-merge-by-redirect-pointer.md).
+
+### Persistence & data access
+
+Postgres via docker-compose; runtime stays **Deno** consuming data libs through `npm:`
+specifiers (no `postinstall` runs, so the supply-chain stance holds). `npm:pg` driver behind
+Kysely's `PostgresDialect`; **Kysely** for type-safe queries (no ORM); **Kysely's migrator**
+for TS migrations; **`kysely-codegen`** (dev-only, run via node/npx) generates the `Database`
+type from the migrated schema. Workflow rule: **migrate, then regenerate types.** Detail and
+the Node-vs-Deno reasoning: [ADR-0003](../adr/0003-postgres-kysely-data-stack.md).
+
+### Simulated identities
+
+No real auth. A seeded **`identity`** table (`id`, `display_name`, optional `org`, `role`) is
+populated by a seed migration for deterministic demos/tests. `role` is `customer` (posts,
+votes, comments) or `admin` (status moves, graveyard, merge/unmerge); admin controls render
+only when an admin identity is selected. The current identity lives in a cookie, changed via a
+switcher ("choosing a hat"). One-vote-per-identity is a `(request_id, identity_id)` unique
+constraint — enforced by the DB, not app code.
 
 ## Testing Decisions
 
