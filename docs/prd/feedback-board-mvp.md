@@ -195,12 +195,13 @@ recursive queries. Full rationale and trade-offs: [ADR-0002](../adr/0002-merge-b
 
 ### Persistence & data access
 
-Postgres via docker-compose; runtime stays **Deno** consuming data libs through `npm:`
-specifiers (no `postinstall` runs, so the supply-chain stance holds). `npm:pg` driver behind
-Kysely's `PostgresDialect`; **Kysely** for type-safe queries (no ORM); **Kysely's migrator**
-for TS migrations; **`kysely-codegen`** (dev-only, run via node/npx) generates the `Database`
-type from the migrated schema. Workflow rule: **migrate, then regenerate types.** Detail and
-the Node-vs-Deno reasoning: [ADR-0003](../adr/0003-postgres-kysely-data-stack.md).
+Postgres via docker-compose; runtime is **Node + pnpm** ([ADR-0004](../adr/0004-switch-runtime-to-node.md),
+reversing the original Deno choice — React/Node is the AFK-reliable stack; supply-chain posture
+reconstructed in a committed `.npmrc`: `ignore-scripts` + `minimumReleaseAge` + pins + allowlist).
+`pg` driver behind Kysely's `PostgresDialect`; **Kysely** for type-safe queries (no ORM);
+**Kysely's migrator** for migrations; **`kysely-codegen`** (dev-only) generates the `Database`
+type from the migrated schema. Workflow rule: **migrate, then regenerate types.** Data-stack
+detail: [ADR-0003](../adr/0003-postgres-kysely-data-stack.md).
 
 ### Simulated identities
 

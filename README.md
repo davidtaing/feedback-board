@@ -21,8 +21,14 @@ overlap filter in the (private) project-direction doc.
 
 ## Stack
 
-- **Runtime: Deno** — built-in permissions, no `postinstall` scripts, native TS. Chosen
-  for the npm supply-chain concern flagged in the plan doc.
+- **Runtime: Node + pnpm** — chosen for AFK reliability: React/Node is the deepest-trained
+  stack, so agents produce it with the fewest mistakes, and it matches the maintainer's React
+  background. (Reversal of the original Deno choice — see
+  [ADR-0004](docs/adr/0004-switch-runtime-to-node.md).)
+- **Supply-chain posture** — Deno's protection was "no install scripts by default." On Node we
+  reconstruct that explicitly, baked into a committed `.npmrc`: `ignore-scripts=true` (no
+  `postinstall` execution) + `minimumReleaseAge` (don't adopt freshly-published versions, the
+  main npm attack vector) + pinned exact versions + the `approved-deps` allowlist.
 - **TypeScript** — Lane-2 / AFK language (best agent productivity).
 - **Dependencies:** see [docs/approved-deps.md](docs/approved-deps.md). Agents must not
   add deps outside that policy without sign-off.

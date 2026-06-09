@@ -4,7 +4,9 @@ Date: 2026-06-09
 
 ## Status
 
-Accepted
+Accepted — **except the runtime**: the Deno / `npm:`-compat parts are superseded by
+[ADR-0004](0004-switch-runtime-to-node.md) (runtime is now Node + pnpm). Postgres, Kysely,
+the migrator, kysely-codegen, and raw-SQL-as-escape-hatch all still stand.
 
 ## Context
 

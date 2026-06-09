@@ -20,10 +20,13 @@ and ADR-0002 / ADR-0003.
    aggregated at read time; unmerge = clear the pointer; **depth-1** (no chains). Post-merge
    activity belongs to the survivor and stays there on unmerge. → [ADR-0002](adr/0002-merge-by-redirect-pointer.md),
    PRD Implementation Decisions, CONTEXT (Merge/Survivor/Unmerge).
-2. **Persistence stack** — Postgres via docker-compose; runtime stays **Deno** with `npm:` deps
-   (no `postinstall` → supply-chain stance holds); `npm:pg` + **Kysely** (queries + migrator) +
-   **`kysely-codegen`** (dev-only, run via node/npx) for types. Rule: migrate → regenerate types.
+2. **Persistence stack** — Postgres via docker-compose; `pg` + **Kysely** (queries + migrator) +
+   **`kysely-codegen`** (dev-only) for types. Rule: migrate → regenerate types.
    → [ADR-0003](adr/0003-postgres-kysely-data-stack.md), `approved-deps.md` (3 rows added).
+   - **Runtime: Node + pnpm** ([ADR-0004](adr/0004-switch-runtime-to-node.md)) — reverses the
+     original Deno choice for AFK reliability (React/Node = deepest-trained stack). Supply-chain
+     posture reconstructed in a committed `.npmrc`: `ignore-scripts` + `minimumReleaseAge` + pins
+     + allowlist. README, ADR-0003 status, approved-deps, PRD all updated to match.
 3. **Simulated identities** — seeded `identity` table (`role`: customer | admin), current
    selection in a cookie via a switcher ("choosing a hat", not auth); `(request_id, identity_id)`
    unique constraint. Prior art (Canny SSO: signed JWT, HS256, vouched-for stable user id) confirms
@@ -41,9 +44,10 @@ and ADR-0002 / ADR-0003.
    *Leaning:* an explicit transition set, and likely a status-change/transition record (gives
    history + a natural home for the resolution note + drives the roadmap). Confirm against
    simplicity.
-7. **App shape.** Server-rendered vs. API+SPA. *Leaning:* server-rendered for an engineering-light,
-   AFK-delegable build — but the rendering approach (plain `Deno.serve` + JSX/templates vs. a
-   framework like Fresh) is a real sub-decision with a dep implication. The biggest remaining call.
+7. **App shape.** Now on Node (ADR-0004), so *real React* is in play. **Direction set:**
+   React-flavored, optimizing for AFK familiarity. Open sub-choice: **React SPA + Node API** vs. a
+   **React meta-framework** (Next / Remix-React-Router). Note the board's interactivity is light
+   (form-driven CRUD + vote/merge actions), so weigh SPA overhead against that. Biggest remaining call.
 8. **Testing decisions.** Integration tests against an **ephemeral Postgres** (consequence of
    ADR-0003 — no in-process file). Decide the ephemeral-DB strategy (compose service / fresh
    schema per run) and how much to test the merge/unmerge aggregation directly.
