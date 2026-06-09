@@ -1,8 +1,7 @@
 # feedback-board
 
-A Canny-style customer-feedback / roadmap tool. A **Lane 2** project per
-[side-projects/project-direction.md](https://github.com/davidtaing/side-projects/blob/main/project-direction.md):
-a product-intuition rep built via **grill → docs → issues → AFK**.
+A Canny-style customer-feedback / roadmap tool. A **Lane 2** project (per a private project-direction doc): a product-intuition rep built
+via **grill → docs → issues → AFK**.
 
 ## What this is (and isn't)
 
@@ -18,7 +17,7 @@ The interesting part is **product judgment, not CRUD**. The hard calls are:
 **Guardrail: keep it AI-free.** No AI-over-text (no auto-dedup, no summarization). The
 product is the judgment calls; introducing AI here would (a) hide the judgment behind a
 model and (b) drift toward the employer's no-go domain (AI-over-language). See the
-overlap filter in the project-direction doc.
+overlap filter in the (private) project-direction doc.
 
 ## Stack
 

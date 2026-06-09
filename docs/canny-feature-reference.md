@@ -40,8 +40,8 @@ the cut-line is decided in the grill, not here._
 Canny's modern dedup is **AI-powered ("Autopilot")**: it auto-detects similar posts and can
 merge a new post into an existing one as a vote + internal comment. **We strip this on
 purpose** — the manual merge/unmerge *is* the judgment call we're here to practice, and
-AI-over-text drifts into the employer no-go domain (see the overlap filter in
-[project-direction](https://github.com/davidtaing/side-projects/blob/main/project-direction.md)).
+AI-over-text drifts into the employer no-go domain (see the overlap filter in the private
+project-direction doc).
 Our clone keeps the human merge decision and the unmerge safety net; it does not predict.
 
 ## Sources
